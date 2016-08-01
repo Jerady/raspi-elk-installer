@@ -55,7 +55,13 @@ print_bold() {
 echo 
 echo "*** Installing ELK on Raspberry Pi ***"
 echo
-[[ -d ${DOWNLOAD_DIRECTORY} ]] && print_minor_message "Using" "${DOWNLOAD_DIRECTORY}" || mkdir ${DOWNLOAD_DIRECTORY} && print_minor_message "Created" "${DOWNLOAD_DIRECTORY}" || exit 1
+if [[ -d ${DOWNLOAD_DIRECTORY} ]]
+then 
+  print_minor_message "Using" "${DOWNLOAD_DIRECTORY}"
+else
+  mkdir ${DOWNLOAD_DIRECTORY}
+  print_minor_message "Created" "${DOWNLOAD_DIRECTORY}"
+fi
 
 
 # 
