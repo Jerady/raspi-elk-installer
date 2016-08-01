@@ -146,9 +146,13 @@ install_kibana() {
   sudo ln -s /usr/local/bin/node /opt/kibana/node/bin/node
   sudo ln -s /usr/local/bin/npm /opt/kibana/node/bin/npm
 
+
+  print_minor_message "Setup" "change owner of /opt/kibana to kibana:root"
+  sudo useradd -r -s /bin/false kibana
+  chown -h kibana:root /opt/kibana && chown -hR kibana:root /opt/kibana-4.5.3-linux-x64
+
   print_minor_message "Installing" "kibana systemctl"
   sudo cp -r kibana/etc /
-  sudo useradd -r -s /bin/false kibana
   sudo systemctl enable kibana
   sudo systemctl start kibana
   sudo systemctl status kibana
