@@ -140,6 +140,13 @@ install_kibana() {
   sudo ln -s /usr/local/bin/node /opt/kibana/node/bin/node
   sudo ln -s /usr/local/bin/npm /opt/kibana/node/bin/npm
 
+  print_minor_message "Installing" "kibana systemctl"
+  sudo cp -r kibana/etc /
+  sudo useradd -r -s /bin/false kibana
+  sudo systemctl enable kibana
+  sudo systemctl start kibana
+  sudo systemctl status kibana
+
   print_message "Start Kibana" "/opt/kibana/bin/kibana"
   print_green "Kibana installed"
 
@@ -171,11 +178,30 @@ install_kibana_plugins() {
   print_green "Kibana plugins installed. Kibana restart needed to take effect."
 }
 
+help() {
+
+  print_major_message "Usage:" "${0} [ elasticesearch | logstash | node | kibana | kibana-plugins | help ]"
+  echo
+  print_message "    elasticesearch " "installs Elasticsearch ${ELASTICSEARCH_VERSION}"
+  print_message "    logstash       " "installs Logstash ${LOGSTASH_VERSION}"
+  print_message "    node           " "installs node & npm for arm (needed for kibana)"
+  print_message "    kibana         "  "installs Kibana ${KIBANA_VERSION}"
+  print_message "    kibana-plugins " "installs Kibana visualization plugins (line-sg, gauge-sg, traffic-sg"
+  print_message "    help           " "displays this help text"
+  echo 
+}
+
 #
 # ---------- M A I N --------------------------------------------------
 #
 
-install_elasticsearch
-install_node
-install_kibana
-install_kibana_plugins
+case "${1}" in
+  elasticesearch) install_elasticsearch ;;
+  logstash)       install_logstash ;;
+  node)           install_node ;;
+  kibana)         install_kibana ;;
+  kibana-plugins) install_kibana_plugins ;;
+  *)              help ;;
+esac
+
+
